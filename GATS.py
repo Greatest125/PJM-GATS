@@ -43,7 +43,7 @@ time.sleep(10)
 driver.quit()
 
 #combine spreadsheets and parse data into better format
-#set working directory -- use the directory in line
+#set working directory -- use the directory in line 18
 os.chdir("C:\\Users\\Leel Dias\\Downloads\\gats")
 
 #find all csv files in the folder
