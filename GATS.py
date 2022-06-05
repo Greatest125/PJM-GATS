@@ -11,8 +11,11 @@ import os
 chromedriver_autoinstaller.install()
 chromeOptions = webdriver.ChromeOptions()
 driver = webdriver.Chrome()
-#change the directory to the whatever you want
-prefs = {"download.default_directory" : '/home/leeld/Downloads/gats'}
+#chromeOptions.add_argument("--disable-gpu") # needed for headless on Windows 
+#chromeOptions.add_argument("--no-sandbox") # linux only
+#chromeOptions.add_argument("--headless") #running headless can cause problems.
+#change the directory to the whatever you want. Note that on windows, backslashes must be duplicated.
+prefs = {"download.default_directory" : "C:\\Users\\Leel Dias\\Downloads\\gats"}
 chromeOptions.add_experimental_option("prefs",prefs)
 driver = webdriver.Chrome(options=chromeOptions)
 
@@ -40,7 +43,7 @@ time.sleep(10)
 driver.quit()
 
 #Merge all of the spreadsheets (one for each facility) into one master spreadsheet 
-os.chdir("/home/leeld/Downloads/gats")
+os.chdir("C:\\Users\\Leel Dias\\Downloads\\gats")
 extensions = ("*csv")
 filenames = []  # made 'filename' plural to indicate it's a list
 
@@ -60,8 +63,8 @@ for file in filenames:
    df = pd.concat(pd.read_csv( file, sheet_name=None), ignore_index=True, sort=False)
    outputxlsx = outputxlsx.append( df, ignore_index=True)
 print('All spreadsheets merged into one file ("RPS Retired Certificates (GATS).xlsx"')
-outputxlsx.to_csv("/home/leeld/Downloads/gats/RPS Retired Certificates (GATS).xlsx", index=False)
+outputxlsx.to_csv("C:\\Users\\Leel Dias\\Downloads\\gats\\RPS Retired Certificates (GATS).xlsx", index=False)
 #Delete data files for each county
-for filename in glob.glob("/home/leeld/Downloads/gats*"):
+for filename in glob.glob("C:\\Users\\Leel Dias\\Downloads\\gats*"):
     os.remove(filename) 
 print('Deleting data spreadsheets')
