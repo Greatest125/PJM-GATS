@@ -19,7 +19,9 @@ Running the cross-platform script is straightforward. You need to have [Python 3
 To run the script, download "[GATS.py](https://github.com/Greatest125/PJM-GATS/blob/main/GATS.py)" to your local computer and run 
 `python3 GATS.py`
 
-Tested on Windows 10 and Google Chrome version 102.
+Then sit back and watch the magic happen! Don't touch your computer :)
+
+Tested on Windows 10 and Google Chrome version 102 (NOT headless)
 
 ## Contact
 The script was developed by the [Energy Justice Network](https://energyjustice.net). For more information and technical support, contact Leel Dias at leel [at] duck.com
