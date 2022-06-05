@@ -42,29 +42,19 @@ for i in range(1, count_state + 1):
 time.sleep(10)
 driver.quit()
 
-#Merge all of the spreadsheets (one for each facility) into one master spreadsheet 
+#combine spreadsheets and parse data into better format
+#set working directory -- use the directory in line
 os.chdir("C:\\Users\\Leel Dias\\Downloads\\gats")
-extensions = ("*csv")
-filenames = []  # made 'filename' plural to indicate it's a list
 
-# building list of filenames moved to separate loop
-for files in extensions: 
-    filenames.extend(glob.glob(files)) 
-# getting csv files to be merged
-print('File names:', filenames)
+#find all csv files in the folder
+#use glob pattern matching -> extension = 'csv'
+#save result in list -> all_filenames
+extension = 'csv'
+all_filenames = [i for i in glob.glob('*.{}'.format(extension))]
+#print(all_filenames)
 
-# empty data frame for the new output csv file with the merged csv files
-outputxlsx = pd.DataFrame()
-
-# for loop to iterate all csv files
-for file in filenames:
-   # using concat for csv files
-   # after reading them with read_csv()
-   df = pd.concat(pd.read_csv( file, sheet_name=None), ignore_index=True, sort=False)
-   outputxlsx = outputxlsx.append( df, ignore_index=True)
-print('All spreadsheets merged into one file ("RPS Retired Certificates (GATS).xlsx"')
-outputxlsx.to_csv("C:\\Users\\Leel Dias\\Downloads\\gats\\RPS Retired Certificates (GATS).xlsx", index=False)
-#Delete data files for each county
-for filename in glob.glob("C:\\Users\\Leel Dias\\Downloads\\gats*"):
-    os.remove(filename) 
-print('Deleting data spreadsheets')
+#combine all files in the list
+df = pd.concat([pd.read_csv(f) for f in all_filenames ])
+df = df[~df['Program'].isin(['Total'])]
+#export to csv
+df.to_csv( "RetiredRECs.csv", index=False, encoding='utf-8-sig')
