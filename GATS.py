@@ -4,12 +4,19 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 import time
 import chromedriver_autoinstaller
+import glob
+import pandas as pd
+import os
 
 chromedriver_autoinstaller.install()
 chromeOptions = webdriver.ChromeOptions()
 driver = webdriver.Chrome()
-wait = WebDriverWait(driver, 20)
+#change the directory to the whatever you want
+prefs = {"download.default_directory" : '/home/leeld/Downloads/gats'}
+chromeOptions.add_experimental_option("prefs",prefs)
+driver = webdriver.Chrome(options=chromeOptions)
 
+wait = WebDriverWait(driver, 20)
 url = "https://gats.pjm-eis.com/GATS2/PublicReports/RPSRetiredCertificatesReportingYear"
 
 
@@ -31,3 +38,30 @@ for i in range(1, count_state + 1):
 
 time.sleep(10)
 driver.quit()
+
+#Merge all of the spreadsheets (one for each facility) into one master spreadsheet 
+os.chdir("/home/leeld/Downloads/gats")
+extensions = ("*csv")
+filenames = []  # made 'filename' plural to indicate it's a list
+
+# building list of filenames moved to separate loop
+for files in extensions: 
+    filenames.extend(glob.glob(files)) 
+# getting csv files to be merged
+print('File names:', filenames)
+
+# empty data frame for the new output csv file with the merged csv files
+outputxlsx = pd.DataFrame()
+
+# for loop to iterate all csv files
+for file in filenames:
+   # using concat for csv files
+   # after reading them with read_csv()
+   df = pd.concat(pd.read_csv( file, sheet_name=None), ignore_index=True, sort=False)
+   outputxlsx = outputxlsx.append( df, ignore_index=True)
+print('All spreadsheets merged into one file ("RPS Retired Certificates (GATS).xlsx"')
+outputxlsx.to_csv("/home/leeld/Downloads/gats/RPS Retired Certificates (GATS).xlsx", index=False)
+#Delete data files for each county
+for filename in glob.glob("/home/leeld/Downloads/gats*"):
+    os.remove(filename) 
+print('Deleting data spreadsheets')
